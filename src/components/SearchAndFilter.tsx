@@ -76,29 +76,29 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ filters, onFiltersCha
   const getPriceDisplay = (value: number) => '$'.repeat(value);
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl p-6 mb-8 border border-white/20">
-      <div className="flex items-center space-x-4 mb-6">
+    <div className="bg-gradient-to-r from-purple-400/20 via-pink-400/20 to-cyan-400/20 backdrop-blur-lg shadow-2xl rounded-3xl p-8 mb-8 border border-white/30 glow-purple">
+      <div className="flex items-center space-x-6 mb-8">
         <div className="flex-1 relative">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-purple-400 w-6 h-6" />
           <input
             type="text"
-            placeholder="Search bars, neighborhoods, or cocktails..."
+            placeholder="🔍 Search bars, neighborhoods, or cocktails..."
             value={filters.search}
             onChange={handleSearchChange}
-            className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-gray-900 placeholder-gray-500 font-medium shadow-sm"
+            className="w-full pl-14 pr-6 py-5 border-2 border-purple-300/50 rounded-3xl focus:ring-4 focus:ring-purple-400/30 focus:border-purple-400 bg-white/90 backdrop-blur-sm text-gray-900 placeholder-purple-400 font-medium shadow-lg text-lg"
           />
         </div>
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center space-x-2 px-6 py-4 rounded-2xl border transition-all duration-200 font-medium ${
+          className={`flex items-center space-x-3 px-8 py-5 rounded-3xl border-2 transition-all duration-300 font-bold text-lg transform hover:scale-105 ${
             showFilters 
-              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg' 
-              : 'bg-white/80 text-gray-700 border-gray-200 hover:bg-white hover:shadow-md'
+              ? 'bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white border-white/50 shadow-2xl glow-pink' 
+              : 'bg-white/90 text-purple-700 border-purple-300 hover:bg-gradient-to-r hover:from-purple-100 hover:to-pink-100 hover:shadow-xl'
           }`}
         >
-          <Filter className="w-5 h-5" />
-          <span>Filters</span>
-          {showFilters && <span className="w-2 h-2 bg-white rounded-full"></span>}
+          <Filter className="w-6 h-6" />
+          <span>✨ Filters</span>
+          {showFilters && <span className="w-3 h-3 bg-white rounded-full animate-pulse"></span>}
         </button>
       </div>
 
