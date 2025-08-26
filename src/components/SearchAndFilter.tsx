@@ -76,26 +76,29 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ filters, onFiltersCha
   const getPriceDisplay = (value: number) => '$'.repeat(value);
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 mb-4">
-      <div className="flex items-center space-x-4 mb-4">
+    <div className="bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl p-6 mb-8 border border-white/20">
+      <div className="flex items-center space-x-4 mb-6">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
             type="text"
             placeholder="Search bars, neighborhoods, or cocktails..."
             value={filters.search}
             onChange={handleSearchChange}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/80 backdrop-blur-sm text-gray-900 placeholder-gray-500 font-medium shadow-sm"
           />
         </div>
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors ${
-            showFilters ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+          className={`flex items-center space-x-2 px-6 py-4 rounded-2xl border transition-all duration-200 font-medium ${
+            showFilters 
+              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white border-blue-600 shadow-lg' 
+              : 'bg-white/80 text-gray-700 border-gray-200 hover:bg-white hover:shadow-md'
           }`}
         >
-          <Filter className="w-4 h-4" />
+          <Filter className="w-5 h-5" />
           <span>Filters</span>
+          {showFilters && <span className="w-2 h-2 bg-white rounded-full"></span>}
         </button>
       </div>
 
