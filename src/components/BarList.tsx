@@ -1,5 +1,28 @@
 import React from 'react';
-import { Phone, Globe, MapPin, Star, Clock, Heart } from 'lucide-react';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Chip,
+  IconButton,
+  Rating,
+  Avatar,
+  Divider,
+  Button,
+  Fade,
+  Zoom,
+} from '@mui/material';
+import {
+  Phone,
+  Language as Globe,
+  LocationOn as MapPin,
+  Star,
+  Schedule as Clock,
+  Favorite,
+  FavoriteBorder,
+} from '@mui/icons-material';
+import { glassmorphismStyle } from '../theme/nightlifeTheme';
 import type { CocktailBar } from '../types';
 
 interface BarListProps {
@@ -56,160 +79,253 @@ const BarList: React.FC<BarListProps> = ({
 
   if (bars.length === 0) {
     return (
-      <div className="p-12 text-center">
-        <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full flex items-center justify-center">
-          <MapPin className="w-10 h-10 text-gray-400" />
-        </div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">No bars found</h3>
-        <p className="text-gray-600 max-w-md mx-auto">
+      <Card sx={{ ...glassmorphismStyle, textAlign: 'center', p: 6 }}>
+        <Avatar
+          sx={{
+            width: 96,
+            height: 96,
+            mx: 'auto',
+            mb: 3,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1))',
+          }}
+        >
+          <MapPin sx={{ fontSize: 40, color: 'text.secondary' }} />
+        </Avatar>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+          No bars found
+        </Typography>
+        <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4, maxWidth: 400, mx: 'auto' }}>
           We couldn't find any cocktail bars matching your criteria. Try adjusting your filters or search terms to discover new places.
-        </p>
-        <div className="mt-6 flex justify-center space-x-4">
-          <span className="text-4xl">🍸</span>
-          <span className="text-4xl">🍹</span>
-          <span className="text-4xl">🥃</span>
-        </div>
-      </div>
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+          {['🍸', '🍹', '🥃'].map((emoji, index) => (
+            <Typography key={index} variant="h2" sx={{ fontSize: '3rem' }}>
+              {emoji}
+            </Typography>
+          ))}
+        </Box>
+      </Card>
     );
   }
 
   return (
-    <div className="space-y-5">
-      {bars.map((bar) => (
-        <div
-          key={bar.id}
-          onClick={() => onBarSelect(bar)}
-          className={`group bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] border ${
-            selectedBar?.id === bar.id 
-              ? 'ring-2 ring-blue-500 border-blue-200 bg-blue-50/50' 
-              : 'border-white/40 hover:border-blue-200'
-          }`}
-        >
-          <div className="flex justify-between items-start mb-4">
-            <div className="flex-1">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
-                  {bar.name}
-                </h3>
-                <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  isOpenNow(bar.openHours) 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {isOpenNow(bar.openHours) ? 'OPEN NOW' : 'CLOSED'}
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-4 mb-3">
-                <div className="flex items-center space-x-1">
-                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <span className="font-semibold text-gray-900">{bar.rating}</span>
-                </div>
-                <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                <span className="font-semibold text-green-600">{formatPriceRange(bar.priceRange)}</span>
-                <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                <div className="flex items-center space-x-1 text-sm text-gray-600">
-                  <Clock className="w-4 h-4" />
-                  <span>{formatHours(bar.openHours)}</span>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-2 text-sm text-gray-600 mb-4">
-                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
-                <span className="leading-relaxed">{bar.address}</span>
-              </div>
-            </div>
-            
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleFavorite(bar.id);
-              }}
-              className="p-3 rounded-full hover:bg-gray-100 transition-all duration-200 hover:scale-110"
-            >
-              <Heart 
-                className={`w-6 h-6 transition-all ${
-                  favoriteIds.includes(bar.id) 
-                    ? 'text-red-500 fill-current scale-110' 
-                    : 'text-gray-400 group-hover:text-red-400'
-                }`} 
-              />
-            </button>
-          </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      {bars.map((bar, index) => (
+        <Zoom in key={bar.id} style={{ transitionDelay: `${index * 100}ms` }}>
+          <Card
+            onClick={() => onBarSelect(bar)}
+            sx={{
+              ...glassmorphismStyle,
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              position: 'relative',
+              overflow: 'visible',
+              border: selectedBar?.id === bar.id ? 2 : 1,
+              borderColor: selectedBar?.id === bar.id ? 'primary.main' : 'rgba(233, 30, 99, 0.2)',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: '0 16px 48px rgba(233, 30, 99, 0.3)',
+                '& .bar-name': {
+                  color: 'primary.main',
+                },
+              },
+            }}
+          >
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                <Box sx={{ flex: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography
+                      variant="h6"
+                      className="bar-name"
+                      sx={{
+                        fontWeight: 'bold',
+                        fontSize: '1.3rem',
+                        transition: 'color 0.3s ease',
+                      }}
+                    >
+                      {bar.name}
+                    </Typography>
+                    <Chip
+                      label={isOpenNow(bar.openHours) ? 'OPEN NOW' : 'CLOSED'}
+                      size="small"
+                      color={isOpenNow(bar.openHours) ? 'success' : 'error'}
+                      sx={{
+                        fontWeight: 'bold',
+                        fontSize: '0.75rem',
+                        animation: isOpenNow(bar.openHours) ? 'pulse 2s infinite' : 'none',
+                      }}
+                    />
+                  </Box>
 
-          {bar.description && (
-            <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl mb-4 border-l-4 border-blue-500">
-              <p className="text-sm text-gray-700 leading-relaxed">{bar.description}</p>
-            </div>
-          )}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <Rating
+                        value={1}
+                        max={1}
+                        readOnly
+                        size="small"
+                        sx={{ '& .MuiRating-iconFilled': { color: '#ffd700' } }}
+                      />
+                      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                        {bar.rating}
+                      </Typography>
+                    </Box>
 
-          <div className="space-y-3 mb-4">
-            <div>
-              <p className="text-xs font-medium text-gray-500 mb-2">COCKTAIL SPECIALTIES</p>
-              <div className="flex flex-wrap gap-2">
-                {bar.cocktailTypes.slice(0, 4).map((cocktail, index) => (
-                  <span
-                    key={index}
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs px-3 py-1.5 rounded-full font-medium"
+                    <Box sx={{ width: 4, height: 4, bgcolor: 'text.secondary', borderRadius: '50%' }} />
+
+                    <Typography variant="body2" sx={{ color: 'success.main', fontWeight: 'bold', fontSize: '1.1rem' }}>
+                      {formatPriceRange(bar.priceRange)}
+                    </Typography>
+
+                    <Box sx={{ width: 4, height: 4, bgcolor: 'text.secondary', borderRadius: '50%' }} />
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <Clock sx={{ fontSize: 16, color: 'text.secondary' }} />
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        {formatHours(bar.openHours)}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 3 }}>
+                    <MapPin sx={{ fontSize: 16, color: 'text.secondary', mt: 0.2 }} />
+                    <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.4 }}>
+                      {bar.address}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFavorite(bar.id);
+                  }}
+                  sx={{
+                    ml: 2,
+                    color: favoriteIds.includes(bar.id) ? 'error.main' : 'text.secondary',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.2)',
+                      color: 'error.main',
+                    },
+                  }}
+                >
+                  {favoriteIds.includes(bar.id) ? <Favorite /> : <FavoriteBorder />}
+                </IconButton>
+              </Box>
+
+              <Divider sx={{ my: 2, opacity: 0.3 }} />
+
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 1, color: 'primary.main' }}>
+                  🍸 Signature Cocktails
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8 }}>
+                  {bar.cocktailTypes.slice(0, 3).map((cocktail, index) => (
+                    <Chip
+                      key={index}
+                      label={cocktail.name}
+                      size="small"
+                      variant="outlined"
+                      sx={{
+                        fontSize: '0.75rem',
+                        borderColor: 'primary.main',
+                        color: 'primary.main',
+                        '&:hover': {
+                          backgroundColor: 'primary.main',
+                          color: 'white',
+                        },
+                      }}
+                    />
+                  ))}
+                  {bar.cocktailTypes.length > 3 && (
+                    <Chip
+                      label={`+${bar.cocktailTypes.length - 3} more`}
+                      size="small"
+                      variant="filled"
+                      color="primary"
+                      sx={{ fontSize: '0.75rem', opacity: 0.7 }}
+                    />
+                  )}
+                </Box>
+              </Box>
+
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 1, color: 'secondary.main' }}>
+                  🎭 Atmosphere
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8 }}>
+                  {bar.atmosphere.slice(0, 2).map((mood, index) => (
+                    <Chip
+                      key={index}
+                      label={mood}
+                      size="small"
+                      variant="outlined"
+                      color="secondary"
+                      sx={{ fontSize: '0.75rem' }}
+                    />
+                  ))}
+                </Box>
+              </Box>
+
+              {bar.description && (
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: 'text.secondary',
+                    fontStyle: 'italic',
+                    lineHeight: 1.4,
+                    mb: 2,
+                  }}
+                >
+                  "{bar.description}"
+                </Typography>
+              )}
+
+              <Box sx={{ display: 'flex', gap: 1, pt: 1 }}>
+                {bar.phone && (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<Phone sx={{ fontSize: 16 }} />}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(`tel:${bar.phone}`, '_blank');
+                    }}
+                    sx={{
+                      fontSize: '0.75rem',
+                      textTransform: 'none',
+                      borderRadius: 2,
+                    }}
                   >
-                    {cocktail.name}
-                  </span>
-                ))}
-                {bar.cocktailTypes.length > 4 && (
-                  <span className="bg-gray-200 text-gray-700 text-xs px-3 py-1.5 rounded-full font-medium">
-                    +{bar.cocktailTypes.length - 4} more
-                  </span>
+                    Call
+                  </Button>
                 )}
-              </div>
-            </div>
-
-            <div>
-              <p className="text-xs font-medium text-gray-500 mb-2">ATMOSPHERE</p>
-              <div className="flex flex-wrap gap-2">
-                {bar.atmosphere.slice(0, 3).map((mood, index) => (
-                  <span
-                    key={index}
-                    className="bg-gradient-to-r from-green-500 to-teal-600 text-white text-xs px-3 py-1.5 rounded-full font-medium"
+                {bar.website && (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<Globe sx={{ fontSize: 16 }} />}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(bar.website, '_blank');
+                    }}
+                    sx={{
+                      fontSize: '0.75rem',
+                      textTransform: 'none',
+                      borderRadius: 2,
+                    }}
                   >
-                    {mood}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-            <div className="flex space-x-4">
-              {bar.phoneNumber && (
-                <a
-                  href={`tel:${bar.phoneNumber}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-xl hover:bg-blue-600 transition-colors"
-                >
-                  <Phone className="w-4 h-4" />
-                  <span>Call</span>
-                </a>
-              )}
-              {bar.website && (
-                <a
-                  href={bar.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center space-x-2 px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-xl hover:bg-gray-700 transition-colors"
-                >
-                  <Globe className="w-4 h-4" />
-                  <span>Website</span>
-                </a>
-              )}
-            </div>
-            <div className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-              {bar.reviews.length} review{bar.reviews.length !== 1 ? 's' : ''}
-            </div>
-          </div>
-        </div>
+                    Website
+                  </Button>
+                )}
+              </Box>
+            </CardContent>
+          </Card>
+        </Zoom>
       ))}
-    </div>
+    </Box>
   );
 };
 

@@ -1,5 +1,40 @@
 import { useState, useMemo, useEffect } from 'react';
-import { MapPin, TrendingUp, Heart, Star, Sparkles, Zap, Coffee } from 'lucide-react';
+import { 
+  ThemeProvider, 
+  CssBaseline, 
+  AppBar, 
+  Toolbar, 
+  Typography, 
+  Box, 
+  Container, 
+  Paper, 
+  Card, 
+  CardContent, 
+  Tabs, 
+  Tab, 
+  Button, 
+  Chip, 
+  Grid,
+  Fade,
+  Zoom,
+  Slide,
+  Avatar,
+  IconButton,
+  Badge,
+} from '@mui/material';
+import { 
+  LocationOn as MapPin, 
+  TrendingUp, 
+  Favorite as Heart, 
+  Star, 
+  AutoAwesome as Sparkles, 
+  FlashOn as Zap, 
+  LocalBar as Cocktail,
+  Close as CloseIcon,
+  Menu as MenuIcon,
+  NightlifeOutlined,
+} from '@mui/icons-material';
+import { nightlifeTheme, glassmorphismStyle, neonGlowStyle } from './theme/nightlifeTheme';
 import MapView from './components/MapView';
 import SearchAndFilter from './components/SearchAndFilter';
 import BarList from './components/BarList';
@@ -135,229 +170,418 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-50 via-blue-50 to-cyan-100 animate-gradient-x">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-pink-500/90 via-purple-600/90 via-blue-600/90 to-cyan-500/90 backdrop-blur-lg border-b border-white/30 shadow-2xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-24">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-12 hover:rotate-0 transition-transform duration-300">
-                  <span className="text-3xl">🍸</span>
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-3 border-white animate-pulse shadow-lg"></div>
-                <Sparkles className="absolute -top-2 -left-2 w-5 h-5 text-yellow-300 animate-spin" />
-              </div>
-              <div>
-                <h1 className="text-4xl font-black bg-gradient-to-r from-white via-yellow-200 to-pink-200 bg-clip-text text-transparent drop-shadow-lg">
+    <ThemeProvider theme={nightlifeTheme}>
+      <CssBaseline />
+      <Box sx={{ 
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
+        overflow: 'hidden',
+        position: 'relative',
+      }}>
+        {/* Animated background elements */}
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'radial-gradient(circle at 20% 50%, rgba(233, 30, 99, 0.1) 0%, transparent 50%)',
+            animation: 'pulse 4s ease-in-out infinite',
+            zIndex: 0,
+          }}
+        />
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'radial-gradient(circle at 80% 30%, rgba(156, 39, 176, 0.1) 0%, transparent 50%)',
+            animation: 'pulse 6s ease-in-out infinite reverse',
+            zIndex: 0,
+          }}
+        />
+
+        {/* Header */}
+        <AppBar position="sticky" elevation={0} sx={{ backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(233, 30, 99, 0.2)' }}>
+          <Toolbar sx={{ py: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+              <Box sx={{ position: 'relative', mr: 3 }}>
+                <Avatar
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    background: 'linear-gradient(135deg, #e91e63, #9c27b0, #00bcd4)',
+                    fontSize: '2rem',
+                    transform: 'rotate(12deg)',
+                    transition: 'transform 0.3s ease',
+                    ...neonGlowStyle,
+                    '&:hover': {
+                      transform: 'rotate(0deg)',
+                    },
+                  }}
+                >
+                  🍸
+                </Avatar>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    bottom: -8,
+                    right: -8,
+                    width: 24,
+                    height: 24,
+                    background: 'linear-gradient(135deg, #00ff88, #00cc70)',
+                    borderRadius: '50%',
+                    border: '3px solid white',
+                    animation: 'pulse 2s infinite',
+                  }}
+                />
+                <Sparkles
+                  sx={{
+                    position: 'absolute',
+                    top: -8,
+                    left: -8,
+                    color: '#ffd700',
+                    animation: 'spin 3s linear infinite',
+                  }}
+                />
+              </Box>
+              
+              <Box>
+                <Typography variant="h1" sx={{ fontSize: { xs: '2rem', sm: '3rem' }, lineHeight: 1 }}>
                   LA Cocktail Finder
-                </h1>
-                <p className="text-white/90 text-sm mt-1 font-medium">🌟 Discover magical cocktail experiences in Los Angeles ✨</p>
-              </div>
-            </div>
-            
-            <div className="hidden md:flex items-center space-x-6">
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                  🌟 Discover magical cocktail experiences in Los Angeles ✨
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 3 }}>
               {loading && (
-                <div className="flex items-center space-x-2 text-white/90">
-                  <Zap className="w-5 h-5 animate-bounce text-yellow-300" />
-                  <span className="font-medium">Loading amazing bars...</span>
-                </div>
+                <Slide direction="left" in={loading}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Zap sx={{ color: '#ffd700', animation: 'bounce 1s infinite' }} />
+                    <Typography variant="body2">Loading amazing bars...</Typography>
+                  </Box>
+                </Slide>
               )}
-              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 border border-white/30">
-                <div className="text-right">
-                  <p className="text-lg font-bold text-white">{displayBars.length} 🍹 bars found</p>
-                  <p className="text-white/80 text-sm">
-                    ❤️ {favoriteIds.length} favorite{favoriteIds.length !== 1 ? 's' : ''}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              
+              <Paper
+                elevation={3}
+                sx={{
+                  ...glassmorphismStyle,
+                  px: 3,
+                  py: 1.5,
+                  textAlign: 'right',
+                }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                  {displayBars.length} 🍹 bars found
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  ❤️ {favoriteIds.length} favorite{favoriteIds.length !== 1 ? 's' : ''}
+                </Typography>
+              </Paper>
+            </Box>
+          </Toolbar>
+        </AppBar>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <SearchAndFilter filters={filters} onFiltersChange={setFilters} />
+        {/* Main Content */}
+        <Container maxWidth="xl" sx={{ py: 4, position: 'relative', zIndex: 1 }}>
+          <SearchAndFilter filters={filters} onFiltersChange={setFilters} />
 
-        <div className={`grid grid-cols-1 ${showBarList ? 'lg:grid-cols-12' : ''} gap-8`}>
-          {showBarList && (
-            <div className="lg:col-span-5 space-y-6">
-              <div className="bg-gradient-to-r from-pink-400/20 via-purple-400/20 to-cyan-400/20 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/30">
-                <div className="flex p-3 bg-white/10 rounded-t-3xl backdrop-blur-sm">
-                  <button
-                    onClick={() => setActiveTab('all')}
-                    className={`flex-1 px-6 py-4 text-sm font-bold transition-all duration-300 rounded-2xl ${
-                      activeTab === 'all'
-                        ? 'text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 shadow-2xl transform scale-[0.95] border-2 border-white/50'
-                        : 'text-gray-700 hover:text-white hover:bg-white/20 hover:scale-105'
-                    }`}
-                  >
-                    🎯 All Bars ({filteredBars.length})
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('trending')}
-                    className={`flex-1 px-6 py-4 text-sm font-bold transition-all duration-300 rounded-2xl flex items-center justify-center space-x-2 ${
-                      activeTab === 'trending'
-                        ? 'text-white bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 shadow-2xl transform scale-[0.95] border-2 border-white/50'
-                        : 'text-gray-700 hover:text-white hover:bg-white/20 hover:scale-105'
-                    }`}
-                  >
-                    <TrendingUp className="w-5 h-5" />
-                    <span>🔥 Trending</span>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('recommended')}
-                    className={`flex-1 px-6 py-4 text-sm font-bold transition-all duration-300 rounded-2xl flex items-center justify-center space-x-2 ${
-                      activeTab === 'recommended'
-                        ? 'text-white bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 shadow-2xl transform scale-[0.95] border-2 border-white/50'
-                        : 'text-gray-700 hover:text-white hover:bg-white/20 hover:scale-105'
-                    }`}
-                  >
-                    <Star className="w-5 h-5" />
-                    <span>✨ For You</span>
-                  </button>
-                </div>
-                
-                <div className="p-4">
-                  <button
-                    onClick={() => setShowBarList(false)}
-                    className="mb-4 w-full px-4 py-2 bg-gradient-to-r from-red-400 to-pink-500 text-white font-medium rounded-xl hover:from-red-500 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 shadow-lg"
-                  >
-                    ✖️ Hide List - Show Map Only
-                  </button>
-                </div>
-              </div>
+          <Grid container spacing={3} sx={{ mt: 2 }}>
+            {showBarList && (
+              <Grid item xs={12} lg={5}>
+                <Fade in={showBarList}>
+                  <Card sx={{ ...glassmorphismStyle, mb: 3 }}>
+                    <Box sx={{ p: 1 }}>
+                      <Tabs
+                        value={activeTab}
+                        onChange={(_, newTab) => setActiveTab(newTab)}
+                        variant="fullWidth"
+                        sx={{
+                          '& .MuiTabs-flexContainer': {
+                            gap: 1,
+                          },
+                        }}
+                      >
+                        <Tab
+                          value="all"
+                          label={
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              🎯 All Bars
+                              <Chip label={filteredBars.length} size="small" />
+                            </Box>
+                          }
+                        />
+                        <Tab
+                          value="trending"
+                          label={
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <TrendingUp sx={{ fontSize: 18 }} />
+                              🔥 Trending
+                            </Box>
+                          }
+                        />
+                        <Tab
+                          value="recommended"
+                          label={
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <Star sx={{ fontSize: 18 }} />
+                              ✨ For You
+                            </Box>
+                          }
+                        />
+                      </Tabs>
+                    </Box>
 
-              <div className="max-h-[calc(100vh-400px)] overflow-y-auto">
-                <BarList
+                    <CardContent>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={() => setShowBarList(false)}
+                        startIcon={<CloseIcon />}
+                        sx={{ mb: 2 }}
+                      >
+                        Hide List - Show Map Only
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Fade>
+
+                <Box sx={{ maxHeight: 'calc(100vh - 400px)', overflow: 'auto' }}>
+                  <BarList
+                    bars={displayBars}
+                    selectedBar={selectedBar}
+                    onBarSelect={handleBarSelect}
+                    onToggleFavorite={handleToggleFavorite}
+                    favoriteIds={favoriteIds}
+                  />
+                </Box>
+              </Grid>
+            )}
+
+            <Grid item xs={12} lg={showBarList ? 7 : 12}>
+              {!showBarList && (
+                <Zoom in={!showBarList}>
+                  <Card sx={{ ...glassmorphismStyle, mb: 4, textAlign: 'center' }}>
+                    <CardContent sx={{ p: 6 }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mb: 3 }}>
+                        {['🍸', '🍹', '🥃', '🍷'].map((emoji, index) => (
+                          <Typography
+                            key={emoji}
+                            variant="h2"
+                            sx={{
+                              fontSize: '3rem',
+                              animation: 'bounce 2s infinite',
+                              animationDelay: `${index * 0.1}s`,
+                            }}
+                          >
+                            {emoji}
+                          </Typography>
+                        ))}
+                      </Box>
+                      <Typography variant="h3" sx={{ mb: 2 }}>
+                        🎯 Click on cocktail markers to explore bars!
+                      </Typography>
+                      <Typography variant="body1" sx={{ color: 'text.secondary', mb: 3 }}>
+                        ✨ Discover amazing cocktail experiences around Los Angeles
+                      </Typography>
+                      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+                        {[Cocktail, Sparkles, Zap].map((Icon, index) => (
+                          <Icon
+                            key={index}
+                            sx={{
+                              fontSize: 32,
+                              color: `hsl(${index * 120 + 300}, 70%, 60%)`,
+                              animation: 'pulse 2s infinite',
+                              animationDelay: `${index * 0.3}s`,
+                            }}
+                          />
+                        ))}
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Zoom>
+              )}
+
+              <Card sx={{ ...glassmorphismStyle, height: 700, position: 'relative', overflow: 'hidden' }}>
+                <MapView
                   bars={displayBars}
                   selectedBar={selectedBar}
                   onBarSelect={handleBarSelect}
-                  onToggleFavorite={handleToggleFavorite}
-                  favoriteIds={favoriteIds}
+                  center={selectedBar ? [selectedBar.latitude, selectedBar.longitude] : LA_CENTER}
+                  zoom={selectedBar ? 16 : 12}
                 />
-              </div>
-            </div>
-          )}
 
-          <div className={showBarList ? 'lg:col-span-7' : 'col-span-1'}>
-            {!showBarList && (
-              <div className="mb-8 text-center">
-                <div className="bg-gradient-to-r from-purple-400/20 via-pink-400/20 to-cyan-400/20 backdrop-blur-lg rounded-3xl p-8 border border-white/30 shadow-2xl">
-                  <div className="flex justify-center space-x-4 mb-6">
-                    <span className="text-4xl animate-bounce">🍸</span>
-                    <span className="text-4xl animate-bounce" style={{animationDelay: '0.1s'}}>🍹</span>
-                    <span className="text-4xl animate-bounce" style={{animationDelay: '0.2s'}}>🥃</span>
-                    <span className="text-4xl animate-bounce" style={{animationDelay: '0.3s'}}>🍷</span>
-                  </div>
-                  <h2 className="text-3xl font-black bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
-                    🎯 Click on cocktail markers to explore bars!
-                  </h2>
-                  <p className="text-gray-600 text-lg font-medium mb-6">
-                    ✨ Discover amazing cocktail experiences around Los Angeles
-                  </p>
-                  <div className="flex justify-center space-x-4">
-                    <Coffee className="w-6 h-6 text-purple-500 animate-pulse" />
-                    <Sparkles className="w-6 h-6 text-pink-500 animate-pulse" />
-                    <Zap className="w-6 h-6 text-cyan-500 animate-pulse" />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="lg:col-span-7">
-            <div className="h-[700px] relative">
-              <MapView
-                bars={displayBars}
-                selectedBar={selectedBar}
-                onBarSelect={handleBarSelect}
-                center={selectedBar ? [selectedBar.latitude, selectedBar.longitude] : LA_CENTER}
-                zoom={selectedBar ? 16 : 12}
-              />
-              
-              {/* Map overlay info */}
-              {selectedBar && (
-                <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20 max-w-xs z-10">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-bold text-gray-900">{selectedBar.name}</h3>
-                    <button
-                      onClick={() => setSelectedBar(null)}
-                      className="w-6 h-6 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+                {/* Map overlay info */}
+                {selectedBar && (
+                  <Slide direction="down" in={!!selectedBar}>
+                    <Paper
+                      elevation={6}
+                      sx={{
+                        position: 'absolute',
+                        top: 16,
+                        left: 16,
+                        maxWidth: 320,
+                        zIndex: 1000,
+                        ...glassmorphismStyle,
+                        p: 2,
+                      }}
                     >
-                      ×
-                    </button>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">{selectedBar.address}</p>
-                  <div className="flex items-center space-x-3">
-                    <div className="flex items-center space-x-1">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      <span className="text-sm font-medium">{selectedBar.rating}</span>
-                    </div>
-                    <span className="text-sm text-green-600 font-medium">
-                      {'$'.repeat(selectedBar.priceRange)}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                          {selectedBar.name}
+                        </Typography>
+                        <IconButton
+                          size="small"
+                          onClick={() => setSelectedBar(null)}
+                          sx={{ color: 'text.secondary' }}
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                      </Box>
+                      <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+                        {selectedBar.address}
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                          <Star sx={{ fontSize: 16, color: '#ffd700' }} />
+                          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                            {selectedBar.rating}
+                          </Typography>
+                        </Box>
+                        <Typography variant="body2" sx={{ color: 'success.main', fontWeight: 'medium' }}>
+                          {'$'.repeat(selectedBar.priceRange)}
+                        </Typography>
+                      </Box>
+                    </Paper>
+                  </Slide>
+                )}
+              </Card>
+            </Grid>
+          </Grid>
 
-        {favoriteIds.length > 0 && (
-          <div className="mt-12 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-8">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-pink-600 rounded-xl flex items-center justify-center">
-                <Heart className="w-4 h-4 text-white fill-current" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                Your Favorites
-              </h2>
-              <span className="px-3 py-1 bg-gradient-to-r from-red-100 to-pink-100 text-red-700 text-sm font-medium rounded-full">
-                {favoriteIds.length} place{favoriteIds.length !== 1 ? 's' : ''}
-              </span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {favoriteIds.map(id => {
-                const bar = sampleBars.find(b => b.id === id);
-                if (!bar) return null;
-                return (
-                  <div
-                    key={id}
-                    onClick={() => handleBarSelect(bar)}
-                    className="group p-5 border border-white/40 rounded-2xl cursor-pointer bg-gradient-to-br from-white/60 to-white/40 hover:from-white/80 hover:to-white/60 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] backdrop-blur-sm"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
-                        {bar.name}
-                      </h3>
-                      <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-1">{bar.address}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="text-sm font-medium text-gray-700">{bar.rating}</span>
-                      </div>
-                      <div className="flex space-x-1">
-                        {bar.cocktailTypes.slice(0, 2).map((cocktail, index) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full"
+          {favoriteIds.length > 0 && (
+            <Fade in={favoriteIds.length > 0}>
+              <Card sx={{ ...glassmorphismStyle, mt: 6 }}>
+                <CardContent sx={{ p: 4 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
+                    <Avatar
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        background: 'linear-gradient(135deg, #e91e63, #9c27b0, #00bcd4)',
+                      }}
+                    >
+                      <Heart sx={{ fontSize: 16 }} />
+                    </Avatar>
+                    <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                      Your Favorites
+                    </Typography>
+                    <Chip
+                      label={`${favoriteIds.length} place${favoriteIds.length !== 1 ? 's' : ''}`}
+                      sx={{
+                        background: 'linear-gradient(135deg, #ff6b6b, #ee5a24, #5f27cd)',
+                        color: 'white',
+                        fontWeight: 'bold',
+                      }}
+                    />
+                  </Box>
+
+                  <Grid container spacing={3}>
+                    {favoriteIds.map(id => {
+                      const bar = sampleBars.find(b => b.id === id);
+                      if (!bar) return null;
+                      return (
+                        <Grid item xs={12} md={6} lg={4} key={id}>
+                          <Card
+                            onClick={() => handleBarSelect(bar)}
+                            sx={{
+                              cursor: 'pointer',
+                              ...glassmorphismStyle,
+                              transition: 'all 0.3s ease',
+                              '&:hover': {
+                                transform: 'translateY(-4px)',
+                                boxShadow: '0 12px 40px rgba(233, 30, 99, 0.3)',
+                              },
+                            }}
                           >
-                            {cocktail.name}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+                            <CardContent>
+                              <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 1 }}>
+                                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                                  {bar.name}
+                                </Typography>
+                                <Box
+                                  sx={{
+                                    width: 8,
+                                    height: 8,
+                                    bgcolor: 'error.main',
+                                    borderRadius: '50%',
+                                  }}
+                                />
+                              </Box>
+                              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+                                {bar.address}
+                              </Typography>
+                              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                  <Star sx={{ fontSize: 16, color: '#ffd700' }} />
+                                  <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                                    {bar.rating}
+                                  </Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', gap: 0.5 }}>
+                                  {bar.cocktailTypes.slice(0, 2).map((cocktail, index) => (
+                                    <Chip
+                                      key={index}
+                                      label={cocktail.name}
+                                      size="small"
+                                      sx={{ fontSize: '0.7rem' }}
+                                    />
+                                  ))}
+                                </Box>
+                              </Box>
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Fade>
+          )}
+        </Container>
+
+        {/* Global CSS animations */}
+        <Box
+          component="style"
+          dangerouslySetInnerHTML={{
+            __html: `
+              @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+              }
+              @keyframes bounce {
+                0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
+                40%, 43% { transform: translateY(-20px); }
+                70% { transform: translateY(-10px); }
+                90% { transform: translateY(-4px); }
+              }
+              @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+              }
+            `,
+          }}
+        />
+      </Box>
+    </ThemeProvider>
   );
 }
 
